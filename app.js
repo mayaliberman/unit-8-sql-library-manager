@@ -24,9 +24,14 @@ app.use('/books', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  const err = new Error('Not Found');
+  const err = new Error('Page not found');
   err.status = 404;
-  next(err);
+  next(err)
+});
+
+app.use((err, req, res, next) => {
+  console.error('This page was not created yet! page status is', err.status);
+  res.render('books/page-not-found', { error: err });
 });
 
 // error handler
@@ -37,7 +42,8 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', { error: err });
+
 });
 
 module.exports = app;

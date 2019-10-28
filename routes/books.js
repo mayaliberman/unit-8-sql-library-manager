@@ -17,16 +17,10 @@ router.get('/', function (req, res, next) {
     });
 });
 
-/* Create a new article form. */
-router.get('/new', function (req, res, next) {
-  res.render('books/new-book', {
-    book: Book.build(),
-    title: 'New Book'
-  });
-});
+
 
 /* POST new book */
-router.post('/new', function (req, res, next) {
+router.post('/', function (req, res, next) {
   Book.create(req.body)
     .then(function (book) {
       res.redirect('/books/' + book.id);
@@ -44,7 +38,16 @@ router.post('/new', function (req, res, next) {
     })
     .catch(function (err) {
       res.send(500);
+
     });
+});
+
+/* Create a new article form. */
+router.get('/new', function (req, res, next) {
+  res.render('books/new-book', {
+    book: Book.build(),
+    title: 'New Book'
+  });
 });
 
 /* GET individual book. */
@@ -55,6 +58,7 @@ router.get('/:id', function (req, res, next) {
         res.render('books/update-book', { book, title: book.title });
       } else {
         res.send(404);
+
       }
     })
     .catch(function (err) {
