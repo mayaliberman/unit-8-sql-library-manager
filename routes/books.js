@@ -70,6 +70,8 @@ router.post('/:id', function (req, res, next) {
   Book.findByPk(req.params.id)
     .then(function (book) {
       if (book) {
+
+        console.log(req.body)
         return book.update(req.body)
       } else {
         req.send(404)
@@ -100,13 +102,13 @@ router.post('/:id/delete', function (req, res, next) {
   Book.findByPk(req.params.id)
     .then(function (book) {
       if (book) {
-        res.render('books/delete', {
-          book: book,
-          title: 'Delete Book'
-        });
+        return book.destroy();
       } else {
         res.send(404);
       }
+    })
+    .then(function () {
+      res.redirect('/books');
     })
     .catch(function (err) {
       res.send(500);

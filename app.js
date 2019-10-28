@@ -29,10 +29,7 @@ app.use(function (req, res, next) {
   next(err)
 });
 
-app.use((err, req, res, next) => {
-  console.error('This page was not created yet! page status is', err.status);
-  res.render('books/page-not-found', { error: err });
-});
+
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -46,7 +43,7 @@ app.use(function (err, req, res, next) {
     res.render('page-not-found')
   } else {
     res.status(err.status || 500);
-    res.render('error' );
+    res.render('error');
   }
 
 });
