@@ -89,7 +89,7 @@ router.get('/:id', function (req, res, next) {
       if (book) {
         res.render('books/update-book', { book, title: "Update Book" });
       } else {
-        res.send(404);
+        send(404)
       }
     })
 
