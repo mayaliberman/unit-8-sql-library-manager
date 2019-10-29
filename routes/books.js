@@ -4,7 +4,6 @@ const Book = require('../models').Book;
 
 
 /* GET books listing. */
-///THIS IS WORKING/////
 router.get('/', function (req, res, next) {
   Book.findAll({ order: [['title', 'ASC']] })
     .then(function (books) {
@@ -19,7 +18,6 @@ router.get('/', function (req, res, next) {
 });
 
 /* POST new book */
-//THIS IS WORKING//
 router.post('/', function (req, res, next) {
   Book.create(req.body)
     .then(function (book) {
@@ -36,6 +34,9 @@ router.post('/', function (req, res, next) {
         throw err;
       }
     })
+    .then(function (book) {
+      res.redirect('/books/');
+    })
     .catch(function (err) {
       res.send(500);
     });
@@ -44,7 +45,6 @@ router.post('/', function (req, res, next) {
 
 
 /* Create a new book form. */
-////// THIS IS WORKING//////
 router.get('/new', function (req, res, next) {
   res.render('books/new-book', {
     book: Book.build(),
@@ -93,7 +93,6 @@ router.get('/:id', function (req, res, next) {
         res.render('books/update-book', { book, title: "Update Book" });
       } else {
         res.send(404);
-
       }
     })
     .then(function (book) {
@@ -104,7 +103,7 @@ router.get('/:id', function (req, res, next) {
     });
 });
 
-/* Delete article form. */
+/* Delete book form. */
 router.post('/:id/delete', function (req, res, next) {
   Book.findByPk(req.params.id)
     .then(function (book) {
