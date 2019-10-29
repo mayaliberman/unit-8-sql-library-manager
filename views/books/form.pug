@@ -1,0 +1,13 @@
+p
+  label(for="title") Title:
+  input(type="text", name="title" value=book.title)
+p
+  label(for="author") Author:
+  input(type="text", name="author" value=book.author)
+p
+  label(for='genre') Genre
+  input(name='genre', type='text' value=book.genre)
+p
+  label(for='year') Year
+  input#year(name='year', type='text' value=book.year)
+input(type="submit")
