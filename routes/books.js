@@ -19,16 +19,17 @@ router.get('/', function (req, res, next) {
 });
 
 /* POST new book */
+//THIS IS WORKING//
 router.post('/', function (req, res, next) {
   Book.create(req.body)
     .then(function (book) {
-      res.redirect('/books/' + book.id);
+      res.redirect('/books/');
     })
     .catch(function (err) {
       if (err.name === 'SequelizeValidationError') {
         res.render('books/new-book', {
           book: Book.build(req.body),
-          title: 'New Book2',
+          title: 'New Book',
           errors: err.errors
         });
       } else {
@@ -58,15 +59,13 @@ router.post('/:id', function (req, res, next) {
   Book.findByPk(req.params.id)
     .then(function (book) {
       if (book) {
-
-        console.log(req.body)
         return book.update(req.body)
       } else {
         req.send(404)
       }
     })
     .then(function (book) {
-      res.redirect('/books/' + book.id);
+      res.redirect('/books/');
     })
     .catch(function (err) {
       if (err.name === 'SequelizeValidationError') {
@@ -97,6 +96,9 @@ router.get('/:id', function (req, res, next) {
 
       }
     })
+    .then(function (book) {
+      res.redirect('/books/');
+    })
     .catch(function (err) {
       res.send(500);
     });
@@ -121,53 +123,23 @@ router.post('/:id/delete', function (req, res, next) {
 });
 
 
-// /* PUT update book. */
-// router.put('/:id', function (req, res, next) {
-//   Book.findByPk(req.params.id)
-//     .then(function (book) {
-//       if (book) {
-//         return book.update(req.body);
-//       } else {
-//         res.send(404);
-//       }
-//     })
-//     .then(function (book) {
-//       res.redirect('/books/' + book.id);
-//     })
-//     .catch(function (err) {
-//       if (err.name === 'SequelizeValidationError') {
-//         const book = Book.build(req.body);
-//         book.id = req.params.id;
 
-//         res.render('books/new', {
-//           book: book,
-//           title: 'Edit Book',
-//           errors: err.errors
-//         });
-//       } else {
-//         throw err;
-//       }
-//     })
-//     .catch(function (err) {
-//       res.send(500);
-//     });
-// });
 /* DELETE individual article. */
-// router.delete('/:id', function (req, res, next) {
-//   Book.findByPk(req.params.id)
-//     .then(function (book) {
-//       if (book) {
-//         return book.destroy();
-//       } else {
-//         res.send(404);
-//       }
-//     })
-//     .then(function () {
-//       res.redirect('/books');
-//     })
-//     .catch(function (err) {
-//       res.send(500);
-//     });
-// });
+router.delete('/:id/delete', function (req, res, next) {
+  Book.findByPk(req.params.id)
+    .then(function (book) {
+      if (book) {
+        return book.destroy();
+      } else {
+        res.send(404);
+      }
+    })
+    .then(function () {
+      res.redirect('/books');
+    })
+    .catch(function (err) {
+      res.send(500);
+    });
+});
 
 module.exports = router;
