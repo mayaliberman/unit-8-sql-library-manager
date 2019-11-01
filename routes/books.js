@@ -3,22 +3,23 @@ var router = express.Router();
 const Book = require('../models').Book;
 
 /* GET books listing. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   Book.findAll({ order: [['title', 'ASC']] })
-    .then(function(books) {
+    .then(function (books) {
       res.render('books/index', {
         books: books,
         title: 'My Library'
       });
     })
-    .catch(function(err) {
-      // res.status(500)
-      throw err;
+    .catch(function (err) {
+      res.status(500)
+      // throw err;
     });
+
 });
 
 /* Create a new book form. */
-router.get('/new', function(req, res, next) {
+router.get('/new', function (req, res, next) {
   res.render('books/new-book', {
     book: Book.build(),
     title: 'New Book'
@@ -26,12 +27,12 @@ router.get('/new', function(req, res, next) {
 });
 
 /* POST new book */
-router.post('/new', function(req, res, next) {
+router.post('/new', function (req, res, next) {
   Book.create(req.body)
-    .then(function(book) {
+    .then(function (book) {
       res.redirect('/');
     })
-    .catch(function(err) {
+    .catch(function (err) {
       if (err.name === 'SequelizeValidationError') {
         res.render('books/new-book', {
           book: Book.build(req.body),
@@ -43,25 +44,25 @@ router.post('/new', function(req, res, next) {
       }
     })
 
-    .catch(function(err) {
+    .catch(function (err) {
       res.send(500);
     });
 });
 
 /* Update book form*/
-router.post('/:id', function(req, res, next) {
+router.post('/:id', function (req, res, next) {
   Book.findByPk(req.params.id)
-    .then(function(book) {
+    .then(function (book) {
       if (book) {
         return book.update(req.body);
       } else {
         req.status(404);
       }
     })
-    .then(function(book) {
+    .then(function (book) {
       res.redirect('/');
     })
-    .catch(function(err) {
+    .catch(function (err) {
       if (err.name === 'SequelizeValidationError') {
         const book = Book.build(req.body);
         book.id = req.params.id;
@@ -74,15 +75,15 @@ router.post('/:id', function(req, res, next) {
         throw err;
       }
     })
-    .catch(function(err) {
+    .catch(function (err) {
       res.status(500);
     });
 });
 
 /* GET individual book. */
-router.get('/:id', function(req, res, next) {
+router.get('/:id', function (req, res, next) {
   Book.findByPk(req.params.id)
-    .then(function(book) {
+    .then(function (book) {
       if (book) {
         res.render('books/update-book', { book, title: 'Update Book' });
       } else {
@@ -90,12 +91,12 @@ router.get('/:id', function(req, res, next) {
           message: 'Page not found',
           error: {
             status: 404,
-            stack: 'The book you were looking for does not exist'
+            stack: 'The book you were looking for does not exist :('
           }
         });
       }
     })
-    .catch(function(err) {
+    .catch(function (err) {
       res.status(500).render('error', {
         message: err,
         error: {
@@ -107,37 +108,37 @@ router.get('/:id', function(req, res, next) {
 });
 
 /* Delete book form. */
-router.post('/:id/delete', function(req, res, next) {
+router.post('/:id/delete', function (req, res, next) {
   Book.findByPk(req.params.id)
-    .then(function(book) {
+    .then(function (book) {
       if (book) {
         return book.destroy();
       } else {
         res.status(404);
       }
     })
-    .then(function() {
+    .then(function () {
       res.redirect('/books');
     })
-    .catch(function(err) {
+    .catch(function (err) {
       res.status(500);
     });
 });
 
 /* DELETE individual article. */
-router.delete('/:id/delete', function(req, res, next) {
+router.delete('/:id/delete', function (req, res, next) {
   Book.findByPk(req.params.id)
-    .then(function(book) {
+    .then(function (book) {
       if (book) {
         return book.destroy();
       } else {
         res.status(404);
       }
     })
-    .then(function() {
+    .then(function () {
       res.redirect('/books');
     })
-    .catch(function(err) {
+    .catch(function (err) {
       res.status(500);
     });
 });
