@@ -23,16 +23,14 @@ app.use('/', indexRouter);
 app.use('/books', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   const err = new Error('Page not found');
   err.status = 404;
-  next(err)
+  next(err);
 });
 
-
-
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -40,12 +38,11 @@ app.use(function (err, req, res, next) {
   // render the error page
 
   if (err.status === 404) {
-    res.render('page-not-found', { error: err })
+    res.render('page-not-found', { message: err });
   } else {
     res.status(err.status || 500);
-    res.render('error', { error: err });
+    res.render('error', { message: err });
   }
-
 });
 
 module.exports = app;
